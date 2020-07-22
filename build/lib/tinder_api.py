@@ -159,7 +159,7 @@ def get_recs_v2():
         r = requests.get(url, headers=headers)
         return r.json()
     except Exception as e:
-        print(e)
+        print('excepted')
 
 def set_webprofileusername(username):
     '''
@@ -299,3 +299,10 @@ def gif_query(query, limit=3):
       print("Something went wrong. Could not get your gifs:", e)
 
 
+# def see_friends():
+#     try:
+#         url = config.host + '/group/friends'
+#         r = requests.get(url, headers=headers)
+#         return r.json()['results']
+#     except requests.exceptions.RequestException as e:
+#         print("Something went wrong. Could not get your Facebook friends:", e)

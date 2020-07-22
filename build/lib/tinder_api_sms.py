@@ -4,42 +4,14 @@ import json
 import config
 import requests
 
-get_headers = {
+headers = {
     'app_version': '6.9.4',
     'platform': 'ios',
+    "content-type": "application/json",
     "User-agent": "Tinder/7.5.3 (iPhone; iOS 10.3.2; Scale/2.00)",
-    "Accept": "application/json"
+	"X-Auth-Token": config.tinder_token,
 }
-headers = get_headers.copy()
-headers['content-type'] = "application/json"
 
-def get_auth_token(fb_auth_token, fb_user_id):
-    if "error" in fb_auth_token:
-        return {"error": "could not retrieve fb_auth_token"}
-    if "error" in fb_user_id:
-        return {"error": "could not retrieve fb_user_id"}
-    url = config.host + '/v2/auth/login/facebook'
-    req = requests.post(url,
-                        headers=headers,
-                        data=json.dumps(
-                            {'token': fb_auth_token, 'facebook_id': fb_user_id})
-                        )
-    try:
-        tinder_auth_token = req.json()["data"]["api_token"]
-        headers.update({"X-Auth-Token": tinder_auth_token})
-        get_headers.update({"X-Auth-Token": tinder_auth_token})
-        print("You have been successfully authorized!")
-        return tinder_auth_token
-    except Exception as e:
-        print(e)
-        return {"error": "Something went wrong. Sorry, but we could not authorize you."}
-
-
-def authverif():
-    res = get_auth_token(config.fb_access_token, config.fb_user_id)
-    if "error" in res:
-        return False
-    return True
 
 
 def get_recommendations():
@@ -115,20 +87,6 @@ def get_meta():
     except requests.exceptions.RequestException as e:
         print("Something went wrong. Could not get your metadata:", e)
 
-def get_meta_v2():
-    '''
-    Returns meta data on yourself from V2 API. Including the following keys:
-    ['account', 'client_resources', 'plus_screen', 'boost',
-    'fast_match', 'top_picks', 'paywall', 'merchandising', 'places',
-    'typing_indicator', 'profile', 'recs']
-    '''
-    try:
-        url = config.host + '/v2/meta'
-        r = requests.get(url, headers=headers)
-        return r.json()
-    except requests.exceptions.RequestException as e:
-        print("Something went wrong. Could not get your metadata:", e)
-
 def update_location(lat, lon):
     '''
     Updates your location to the given float inputs
@@ -159,7 +117,7 @@ def get_recs_v2():
         r = requests.get(url, headers=headers)
         return r.json()
     except Exception as e:
-        print(e)
+        print('excepted')
 
 def set_webprofileusername(username):
     '''
@@ -205,13 +163,6 @@ def send_msg(match_id, msg):
     except requests.exceptions.RequestException as e:
         print("Something went wrong. Could not send your message:", e)
 
-def unmatch(match_id):
-    try:
-        url = config.host + '/user/matches/%s' % match_id
-        r = requests.delete(url, headers=headers)
-        return r.json()
-    except requests.exceptions.RequestException as e:
-        print("Something went wrong. Could not unmatch person:", e)
 
 def superlike(person_id):
     try:
@@ -225,7 +176,7 @@ def superlike(person_id):
 def like(person_id):
     try:
         url = config.host + '/like/%s' % person_id
-        r = requests.get(url, headers=get_headers)
+        r = requests.get(url, headers=headers)
         return r.json()
     except requests.exceptions.RequestException as e:
         print("Something went wrong. Could not like:", e)
@@ -234,7 +185,7 @@ def like(person_id):
 def dislike(person_id):
     try:
         url = config.host + '/pass/%s' % person_id
-        r = requests.get(url, headers=get_headers)
+        r = requests.get(url, headers=headers)
         return r.json()
     except requests.exceptions.RequestException as e:
         print("Something went wrong. Could not dislike:", e)
@@ -272,30 +223,10 @@ def all_matches():
     except requests.exceptions.RequestException as e:
         print("Something went wrong. Could not get your match info:", e)
 
-def fast_match_info():
-  try:
-      url = config.host + '/v2/fast-match/preview'
-      r = requests.get(url, headers=headers)
-      count = r.headers['fast-match-count']
-      # image is in the response but its in hex..
-      return count
-  except requests.exceptions.RequestException as e:
-      print("Something went wrong. Could not get your fast-match count:", e)
-
-def trending_gifs(limit=3):
-  try:
-      url = config.host + '/giphy/trending?limit=%s' % limit
-      r = requests.get(url, headers=headers)
-      return r.json()
-  except requests.exceptions.RequestException as e:
-      print("Something went wrong. Could not get the trending gifs:", e)
-
-def gif_query(query, limit=3):
-  try:
-      url = config.host + '/giphy/search?limit=%s&query=%s' % (limit, query)
-      r = requests.get(url, headers=headers)
-      return r.json()
-  except requests.exceptions.RequestException as e:
-      print("Something went wrong. Could not get your gifs:", e)
-
-
+# def see_friends():
+#     try:
+#         url = config.host + '/group/friends'
+#         r = requests.get(url, headers=headers)
+#         return r.json()['results']
+#     except requests.exceptions.RequestException as e:
+#         print("Something went wrong. Could not get your Facebook friends:", e)

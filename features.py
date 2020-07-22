@@ -105,21 +105,6 @@ def sort_by_value(sortType):
     return sorted(match_info.items(), key=lambda x: x[1][sortType], reverse=True)
 
 
-# def see_friends_profiles(name=None):
-#     friends = api.see_friends()
-#     if name == None:
-#         return friends
-#     else:
-#         result_dict = {}
-#         name = name.title()  # upcases first character of each word
-#         for friend in friends:
-#             if name in friend["name"]:
-#                 result_dict[friend["name"]] = friend
-#         if result_dict == {}:
-#             return "No friends by that name"
-#         return result_dict
-
-
 def convert_from_datetime(difference):
     secs = difference.seconds
     days = difference.days
