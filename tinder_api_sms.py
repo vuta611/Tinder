@@ -9,7 +9,7 @@ headers = {
     'platform': 'ios',
     "content-type": "application/json",
     "User-agent": "Tinder/7.5.3 (iPhone; iOS 10.3.2; Scale/2.00)",
-	"X-Auth-Token": config.tinder_token,
+	"X-Auth-Token": "1ef4978d-4acd-4f15-857e-23a7e0d4cf34"
 }
 
 
@@ -117,7 +117,7 @@ def get_recs_v2():
         r = requests.get(url, headers=headers)
         return r.json()
     except Exception as e:
-        print('excepted')
+        print(e)
 
 def set_webprofileusername(username):
     '''
@@ -222,11 +222,3 @@ def all_matches():
         return r.json()
     except requests.exceptions.RequestException as e:
         print("Something went wrong. Could not get your match info:", e)
-
-# def see_friends():
-#     try:
-#         url = config.host + '/group/friends'
-#         r = requests.get(url, headers=headers)
-#         return r.json()['results']
-#     except requests.exceptions.RequestException as e:
-#         print("Something went wrong. Could not get your Facebook friends:", e)

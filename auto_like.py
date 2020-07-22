@@ -1,21 +1,18 @@
-import tinder_api
-import fb_auth_token
+import tinder_api_sms
 import features
+import random
 
-host = 'https://api.gotinder.com'
-fb_username = 'vu.ta611@gmail.com'
-fb_password = 'Anhvu1995'
-
-fb_access_token = fb_auth_token.get_fb_access_token(fb_username, fb_password)
-fb_user_id = fb_auth_token.get_fb_id(fb_access_token)
-
-tinder_api.get_auth_token(fb_access_token, fb_user_id)
+locations = {'10.766869':'106.692811', '21.035127':'105.851987', '16.065015':'108.221882', '11.947322':'108.440285'}
+#10.766869, 106.692811 - BV
+#21.035127, 105.851987 - TH
+#16.065015, 108.221882 - DN
+#11.947322, 108.440285 - DL
 
 def autolike():
-    recs = tinder_api.get_recommendations()#['results']
+    recs = tinder_api_sms.get_recommendations()
     if 'results' not in recs:
-        tinder_api.update_location(a,b)
-        
+        lat, lon = random.choice(list(locations.items()))
+        tinder_api_sms.update_location(lat, lon)
         autolike()
     else:
         results = recs['results']
@@ -23,10 +20,8 @@ def autolike():
             person_id = person["_id"]
             name = person["name"]
             print(name)
-            tinder_api.like(person_id)
+            tinder_api_sms.like(person_id)
         features.pause()
-
-#'{"message":"recs timeout"}'
 
 while True:
     autolike()
