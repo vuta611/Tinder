@@ -12,14 +12,11 @@ places = {
     ('20.855117', '106.682231'):'Hai Phong'
 }
 
-def get_places(lat, lon):
-    return print('Switching to: %s' %(places[lat, lon]))
-
 def autolike():
     recs = tinder_api_sms.get_recommendations()
     if 'results' not in recs:
         lat, lon = random.choice(list(places))
-        get_places(lat, lon)
+        print('Switching to: %s' %(places[lat, lon]))
         tinder_api_sms.update_location(lat, lon)
         autolike()
     else:
